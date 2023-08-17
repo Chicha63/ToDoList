@@ -3,21 +3,21 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig';
 
-const Login = () =>{
+const Signup = () =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const login = async() =>{
+    const signup = async() =>{
         try{
-            const request = api.post("/api/auth/signin", {
+            const request = api.post("/api/auth/signup", {
                 email,
                 password
-            }).then(
-                function(response) {
-                    sessionStorage.setItem('token', response.data.token)
-                    navigate("/home")
-                })
+            }).then(function(response) {
+                const parsedResponse = JSON.parse(response);
+                sessionStorage.setItem('token', parsedResponse.token)
+                navigate("/home")
+            });
         }catch(err){
             console.log(err);
         }
@@ -25,7 +25,7 @@ const Login = () =>{
 
     return(
         <div>
-            <h3>Login</h3>
+            <h3>Sign up</h3>
             <div>
                 <div><label>Email</label></div>
                 <input type="email" placeholder="Enter email"
@@ -44,9 +44,9 @@ const Login = () =>{
                   }}
                 />
             </div>
-                <button type="submit" onClick={login}>Login</button>
+                <button type="submit" onClick={signup}>Sign up</button>
         </div>
     )
 }
 
-export default Login;    
+export default Signup;    

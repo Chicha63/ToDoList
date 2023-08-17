@@ -32,7 +32,9 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword()
         );
     }
-
+    public ObjectId getId(){
+        return id;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
