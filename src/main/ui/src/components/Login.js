@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig';
+import { Authcontext } from "../AuthContext";
 
 const Login = () =>{
+    const auth = useContext(Authcontext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -15,7 +17,8 @@ const Login = () =>{
                 password
             }).then(
                 function(response) {
-                    sessionStorage.setItem('token', response.data.token)
+
+                    auth.login(response.data.token);
                     navigate("/home")
                 })
         }catch(err){

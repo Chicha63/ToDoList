@@ -1,22 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig';
+import { Authcontext } from "../AuthContext";
 
 const Signup = () =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-
+    const auth = useContext(Authcontext);
     const signup = async() =>{
         try{
             const request = api.post("/api/auth/signup", {
                 email,
                 password
             }).then(function(response) {
-                const parsedResponse = JSON.parse(response);
-                sessionStorage.setItem('token', parsedResponse.token)
-                navigate("/home")
+                auth.login(response.data.token);
+                navigate("/home");
             });
         }catch(err){
             console.log(err);

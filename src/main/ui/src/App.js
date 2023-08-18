@@ -1,23 +1,23 @@
 import './App.css';
-import api from './api/axiosConfig';
-import Login from './components/Login';
-import {Routes, Route} from 'react-router-dom';
-import Signup from './components/Signup';
-import Home from './components/Home';
+import { Authcontext } from './AuthContext.js';
+import { useAuth } from './auth.hook';
+import { useRoutes } from './routes';
 
 
 function App() {
+  const {token, login, logout} = useAuth();
+  const isAuthenticated = !!token;
+  const routes = useRoutes(isAuthenticated)
   return (
-    <div className="App">
-      <Routes>
-        <Route path='/login' element={<Login/>}>
-        </Route>
-        <Route path='/signup' element={<Signup/>}>
-        </Route>
-        <Route path='/home' element={<Home/>}>
-        </Route>
-      </Routes>
-    </div>
-  );
+    <Authcontext.Provider value={{
+      token,login, logout, isAuthenticated
+    }}>
+      <div className="App">
+        {routes}
+      </div>
+    </Authcontext.Provider>
+      
+    );
+  
 }
 export default App;
