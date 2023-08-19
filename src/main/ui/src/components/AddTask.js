@@ -3,7 +3,7 @@ import { useState } from "react";
 import api from '../api/axiosConfig';
 
 const AddTask = () =>{
-    const [title, setTitle] = useState();
+    const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [due_date, setDue_date] = useState("");
     const [priority, setPriority] = useState("");
@@ -18,7 +18,7 @@ const AddTask = () =>{
                 priority:priority,
                 category:category,
                 status:status
-            })
+            }).then(console.log("success"));
         }catch(err){
             console.log(err);
         }

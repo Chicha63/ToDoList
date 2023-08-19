@@ -17,7 +17,7 @@ const Login = () =>{
                 password
             }).then(
                 function(response) {
-
+                    console.log(response.data.token);
                     auth.login(response.data.token);
                     navigate("/home")
                 })

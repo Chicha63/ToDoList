@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = {"http://localhost:3000"}, allowCredentials = "true")
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {

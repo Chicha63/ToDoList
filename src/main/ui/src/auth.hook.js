@@ -5,7 +5,7 @@ export const useAuth = () =>{
 
     const login = useCallback((jwtToken)=>{
         setToken(jwtToken);
-        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("token", jwtToken);
     },[])
 
     const logout = useCallback(()=>{
@@ -15,7 +15,7 @@ export const useAuth = () =>{
 
     useEffect(()=>{
         const data = sessionStorage.getItem("token")
-
+        console.log(data)
         if(data){
             login(data);
         }
