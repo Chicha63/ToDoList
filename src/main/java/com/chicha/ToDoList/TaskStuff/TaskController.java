@@ -28,9 +28,11 @@ public class TaskController {
     public ResponseEntity<List<Task>> getAllTasks(){
         return new ResponseEntity<List<Task>>(taskService.allTasks(), HttpStatus.OK);
     }
-    @GetMapping("/{user_id}")
-    public ResponseEntity<Optional<List<Task>>> getTasksByUser_Id(@PathVariable ObjectId user_id){
-        return new ResponseEntity<Optional<List<Task>>>(taskService.tasksByUser_Id(user_id), HttpStatus.OK);
+    @GetMapping("/get")
+    public ResponseEntity<Optional<List<Task>>> getTasksByUser_Id(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl)auth.getPrincipal();
+        return new ResponseEntity<Optional<List<Task>>>(taskService.tasksByUser_Id(userDetails.getId()), HttpStatus.OK);
     }
 
     @PostMapping("/add")
