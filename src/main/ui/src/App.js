@@ -3,7 +3,7 @@ import { Authcontext } from './AuthContext.js';
 import { useAuth } from './auth.hook';
 import Navbar from './components/Navbar';
 import { useRoutes } from './routes';
-import { useEffect } from 'react';
+import { animate } from './clickanim';
 
 
 function App() {
