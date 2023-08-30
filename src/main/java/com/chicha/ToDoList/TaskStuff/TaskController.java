@@ -29,10 +29,10 @@ public class TaskController {
         return new ResponseEntity<List<Task>>(taskService.allTasks(), HttpStatus.OK);
     }
     @GetMapping("/get")
-    public ResponseEntity<Optional<List<Task>>> getTasksByUser_Id(){
+    public ResponseEntity<Optional<List<TaskDTO>>> getTasksByUser_Id(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl)auth.getPrincipal();
-        return new ResponseEntity<Optional<List<Task>>>(taskService.tasksByUser_Id(userDetails.getId()), HttpStatus.OK);
+        return new ResponseEntity<Optional<List<TaskDTO>>>(taskService.tasksByUser_Id(userDetails.getId()), HttpStatus.OK);
     }
 
     @PostMapping("/add")

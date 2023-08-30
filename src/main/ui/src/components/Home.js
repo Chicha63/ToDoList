@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import api from '../api/axiosConfig';
 import './Home.css'
 
-
 const Home = () =>{
     const [tasks, setTasks] = useState([]);
-
+  
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -23,17 +22,18 @@ const Home = () =>{
   const updateStatus = async (task, stat) => {
     try {
         const response = await api.put("/api/tasks/update",{
-            _id: task._id,
-            title:task.title,
-            description:task.description,
-            due_date:task.due_date,
-            priority:task.priority,
-            category:task.category,
-            status:stat,
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            due_date: task.due_date,
+            priority: task.priority,
+            category: task.category,
+            status: stat,
             created_at: task.created_at,
+            updated_at: task.updated_at,
             user: task.user
         });
-        setTasks(response.data);
+        fetchTasks();
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }

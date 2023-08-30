@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -18,8 +19,18 @@ public class TaskService {
     public Optional<List<Task>> tasksByTitle(String title){
         return taskRepository.findTasksByTitle(title);
     }
-    public Optional<List<Task>> tasksByUser_Id(ObjectId user_id){
-        return taskRepository.findTasksByUser(user_id);
+    public Optional<List<TaskDTO>> tasksByUser_Id(ObjectId user_id){
+        Optional<List<Task>> optionalTasks = taskRepository.findTasksByUser(user_id);
+
+        if (optionalTasks.isPresent()) {
+            List<Task> tasks = optionalTasks.get();
+            List<TaskDTO> taskDTOs = tasks.stream()
+                    .map(TaskDTO::new) // Assuming you have a constructor in TaskDTO that takes a Task object
+                    .collect(Collectors.toList());
+            return Optional.of(taskDTOs);
+        } else {
+            return Optional.empty();
+        }
     }
 
     public void addTask(Task task){
@@ -34,7 +45,9 @@ public class TaskService {
         task.setDescription(updatedTask.getDescription());
         task.setTitle(updatedTask.getTitle());
         task.setDue_date(updatedTask.getDue_date());
+        task.setStatus(updatedTask.getStatus());
         task.setUpdated_at(new Date());
+        taskRepository.save(task);
     }
 
     public void deleteTask(ObjectId task_id){
