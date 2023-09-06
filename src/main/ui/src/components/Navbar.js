@@ -14,6 +14,7 @@ const Navbar = () =>{
             const request = api.post("/api/logout")
             .then(
                 function(response) {
+                    console.log(response)
                     auth.logout();
                     navigate("/home")
                 })

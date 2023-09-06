@@ -17,9 +17,10 @@ const Signup = () =>{
             const request = api.post("/api/auth/signup", {
                 email,
                 password
-            }).then(function(response) {
+            }).then(
+                function(response) {
                 auth.login(response.data.token);
-                navigate("/home");
+                navigate("/login");
             });
         }catch(err){
             console.log(err);

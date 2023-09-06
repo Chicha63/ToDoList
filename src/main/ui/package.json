@@ -9,7 +9,6 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
-    "bootstrap": "^5.3.1",
     "bson": "^6.0.0",
     "bson-objectid": "^2.0.4",
     "crypto-browserify": "^3.12.0",

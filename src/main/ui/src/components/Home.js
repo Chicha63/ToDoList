@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import api from '../api/axiosConfig';
 import './Home.css'
+import { Authcontext } from "../AuthContext";
+import TaskModal from "./TaskModal";
 
 const Home = () =>{
     const [tasks, setTasks] = useState([]);
-  
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
   const fetchTasks = async () => {
-    try {
-      const response = await api.get("/api/tasks/get");
-      setTasks(response.data);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-    }
+      api.get('/api/tasks/get',
+        ).then((res) => {
+            setTasks(res.data);
+            console.log(tasks)
+            },fail => {
+                console.log(fail);
+                setTimeout(window.location.reload(true), 1000);
+            })
   };
 
   const updateStatus = async (task, stat) => {
@@ -39,10 +40,19 @@ const Home = () =>{
       }
   }
 
-  const handleTaskClick = (taskId) => {
-    console.log("Task clicked:", taskId);
+  const handleTaskClick = (task) => {
+    console.log("task clicked")
+    setSelectedTask(task);
+    setIsModalOpen(true);
   };
 
+  const closeModal = () => {
+    setSelectedTask(null);
+    setIsModalOpen(false);
+  };
+  useEffect(() => {
+    fetchTasks();
+  }, []);
   return (
     <div className="task-board">
       <div className="column pending">
@@ -54,7 +64,7 @@ const Home = () =>{
               className="task"
               key={task.id}
             >
-                <div onClick={() => handleTaskClick(task.id)}>
+                <div onClick={() => handleTaskClick(task)}>
                     <h4>{task.title}</h4>
                     <p>{task.description}</p>
                 </div>
@@ -71,7 +81,7 @@ const Home = () =>{
               className="task"
               key={task.id}
             >
-              <div onClick={() => handleTaskClick(task.id)}>
+              <div onClick={() => handleTaskClick(task)}>
                 <h4>{task.title}</h4>
                 <p>{task.description}</p>
               </div>
@@ -87,13 +97,14 @@ const Home = () =>{
             <div
               className="task"
               key={task.id}
-              onClick={() => handleTaskClick(task.id)}
+              onClick={() => handleTaskClick(task)}
             >
               <h4>{task.title}</h4>
               <p>{task.description}</p>
             </div>
           ))}
       </div>
+      <TaskModal task={selectedTask} isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };
