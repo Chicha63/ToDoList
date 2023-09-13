@@ -9,6 +9,7 @@ const Home = () =>{
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDisplayed, setDisplayed] = useState(false);
   const fetchTasks = async () => {
       api.get('/api/tasks/get',
         ).then((res) => {
@@ -40,10 +41,11 @@ const Home = () =>{
       }
   }
 
-  const handleTaskClick = (task) => {
+  const handleTaskClick = (task, displayEdit) => {
     console.log("task clicked")
     setSelectedTask(task);
     setIsModalOpen(true);
+    setDisplayed(displayEdit)
   };
 
   const closeModal = () => {
@@ -64,7 +66,7 @@ const Home = () =>{
               className="task"
               key={task.id}
             >
-                <div onClick={() => handleTaskClick(task)}>
+                <div onClick={() => handleTaskClick(task, true)}>
                     <h4>{task.title}</h4>
                     <p>{task.description}</p>
                 </div>
@@ -81,7 +83,7 @@ const Home = () =>{
               className="task"
               key={task.id}
             >
-              <div onClick={() => handleTaskClick(task)}>
+              <div onClick={() => handleTaskClick(task, true)}>
                 <h4>{task.title}</h4>
                 <p>{task.description}</p>
               </div>
@@ -97,14 +99,14 @@ const Home = () =>{
             <div
               className="task"
               key={task.id}
-              onClick={() => handleTaskClick(task)}
+              onClick={() => handleTaskClick(task, false)}
             >
               <h4>{task.title}</h4>
               <p>{task.description}</p>
             </div>
           ))}
       </div>
-      <TaskModal task={selectedTask} isOpen={isModalOpen} onClose={closeModal} />
+      <TaskModal task={selectedTask} isOpen={isModalOpen} onClose={closeModal} displayEdit={isDisplayed}/>
     </div>
   );
 };
