@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "./TaskModal.css"
 import "./Inputs.css"
+import api from '../api/axiosConfig';
 
 const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({ ...task });
-
   const updateTask = async (task) => {
     try {
         const response = await api.put("/api/tasks/update",{
@@ -20,9 +20,8 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
             updated_at: task.updated_at,
             user: task.user
         });
-        fetchTasks();
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        console.error("Error updating task:", error);
       }
   }
 
@@ -31,13 +30,14 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
   };
 
   const handleSaveClick = () => {
-    updateTask(task)
+    updateTask(task);
     setIsEditing(false);
+    onClose();
   };
 
   const handleCancelClick = () => {
     setIsEditing(false);
-    setEditedTask({ ...task }); // Reset the edited task to the original task
+    setEditedTask({ ...task });
   };
 
   if (!isOpen) return null;
@@ -46,9 +46,11 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
     <div className="modal-container">
       <div className="modal-content">
         {
-          isEditing ? (<></>):(<><span className="close-button" onClick={onClose}>
+          isEditing ? (<span className="close-button" style={{display:"none"}} onClick={onClose}>
           &times;
-        </span></>)
+        </span>):(<span className="close-button" onClick={onClose}>
+          &times;
+        </span>)
         }
         <div className="modal-header">
           <h2>Task Details</h2>
@@ -96,21 +98,18 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
                 />
               </div>
               <div className="input-container">
-                <label className="custom-label">Status</label>
-                <select
+                <label className="custom-label">Category</label>
+                <input
+                  type="text"
                   className="custom-field"
-                  value={editedTask.status}
+                  value={editedTask.category}
                   onChange={(e) =>
                     setEditedTask({
                       ...editedTask,
-                      status: e.target.value,
+                      category: e.target.value,
                     })
                   }
-                >
-                  <option value="todo">To Do</option>
-                  <option value="inprogress">In Progress</option>
-                  <option value="completed">Completed</option>
-                </select>
+                />
               </div>
               <button style={{marginRight:'80px', marginTop:'20px'}} className="button" onClick={handleSaveClick}>
                 Save
@@ -127,7 +126,7 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
               <p>Due at: {new Date(task.due_date).toLocaleString()}</p>
               <p>Status: {task.status}</p>
               {displayEdit && (
-                <button style={{width:"100px", backgroundColor:"#ffc107", marginLeft:"350px", marginRight:"0px"}} className="button" onClick={handleEditClick}>
+                <button style={{width:"100px", backgroundColor:"#ffc107" }} className="button" onClick={handleEditClick}>
                   Edit
                 </button>
               )}

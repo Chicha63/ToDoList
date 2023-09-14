@@ -51,6 +51,7 @@ const Home = () =>{
   const closeModal = () => {
     setSelectedTask(null);
     setIsModalOpen(false);
+    fetchTasks();
   };
   useEffect(() => {
     fetchTasks();
