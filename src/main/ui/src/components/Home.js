@@ -10,106 +10,154 @@ const Home = () =>{
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDisplayed, setDisplayed] = useState(false);
-  const fetchTasks = async () => {
-      api.get('/api/tasks/get',
-        ).then((res) => {
+    const fetchTasks = async () => {
+        api.get('/api/tasks/get').then((res) => {
             setTasks(res.data);
-            console.log(tasks)
-            },fail => {
-                console.log(fail);
-                setTimeout(window.location.reload(true), 1000);
-            })
-  };
+            console.log(tasks);
+        }, fail => {
+            console.log(fail);
+            setTimeout(window.location.reload(true), 1000);
+        })
+    };
+  
+    const updateStatus = async (task, stat) => {
+        try {
+            const response = await api.put("/api/tasks/update",{
+                id: task.id,
+                title: task.title,
+                description: task.description,
+                due_date: task.due_date,
+                priority: task.priority,
+                category: task.category,
+                status: stat,
+                created_at: task.created_at,
+                updated_at: task.updated_at,
+                user: task.user
+            });
+            fetchTasks();
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    }
 
-  const updateStatus = async (task, stat) => {
-    try {
-        const response = await api.put("/api/tasks/update",{
-            id: task.id,
-            title: task.title,
-            description: task.description,
-            due_date: task.due_date,
-            priority: task.priority,
-            category: task.category,
-            status: stat,
-            created_at: task.created_at,
-            updated_at: task.updated_at,
-            user: task.user
-        });
+    const handleTaskClick = (task, displayEdit) => {
+        console.log("task clicked")
+        setSelectedTask(task);
+        setIsModalOpen(true);
+        setDisplayed(displayEdit)
+    };
+
+    const closeModal = () => {
+        setSelectedTask(null);
+        setIsModalOpen(false);
         fetchTasks();
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-  }
-
-  const handleTaskClick = (task, displayEdit) => {
-    console.log("task clicked")
-    setSelectedTask(task);
-    setIsModalOpen(true);
-    setDisplayed(displayEdit)
-  };
-
-  const closeModal = () => {
-    setSelectedTask(null);
-    setIsModalOpen(false);
-    fetchTasks();
-  };
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-  return (
-    <div className="task-board">
-      <div className="column pending">
-        <h3>Pending</h3>
-        {tasks
-          .filter((task) => task.status === "Pending")
-          .map((task) => (
-            <div
-              className="task"
-              key={task.id}
-            >
-                <div onClick={() => handleTaskClick(task, true)}>
-                    <h4>{task.title}</h4>
-                    <p>{task.description}</p>
-                </div>
-              <button className="begin-button" onClick={()=>updateStatus(task, "In Progress")}>Begin</button>
+    };
+  
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+  
+    return (
+        <div className="task-board">
+            <div className="column pending">
+                <h3>Pending</h3>
+                {tasks
+                    .filter((task) => task.status === "Pending" && new Date(task.due_date) > new Date())
+                    .map((task) => (
+                        <div
+                            className="task"
+                            key={task.id}
+                            onClick={() => handleTaskClick(task, true)}
+                            style={{
+                                borderColor: task.priority === "High" ? "red" : (task.priority === "Medium" ? "yellow" : "inherit"),
+                            }}
+                        >
+                            <div>
+                                <h4>{task.title}</h4>
+                                <p>{task.description}</p>
+                            </div>
+                            <button
+                                className="begin-button"
+                                onClick={() => updateStatus(task, "In Progress")}
+                            >
+                                Begin
+                            </button>
+                        </div>
+                    ))}
             </div>
-          ))}
-      </div>
-      <div className="column in-progress">
-        <h3>In Progress</h3>
-        {tasks
-          .filter((task) => task.status === "In Progress")
-          .map((task) => (
-            <div
-              className="task"
-              key={task.id}
-            >
-              <div onClick={() => handleTaskClick(task, true)}>
-                <h4>{task.title}</h4>
-                <p>{task.description}</p>
-              </div>
-              <button className="done-button" onClick={()=>updateStatus(task, "Done")}>Done</button>
+            <div className="column in-progress">
+                <h3>In Progress</h3>
+                {tasks
+                    .filter((task) => task.status === "In Progress" && (new Date(task.due_date) > new Date()))
+                    .map((task) => (
+                        <div
+                            className="task"
+                            key={task.id}
+                            onClick={() => handleTaskClick(task, true)}
+                            style={{
+                                borderColor: task.priority === "High" ? "red" : (task.priority === "Medium" ? "yellow" : "inherit"),
+                            }}
+                        >
+                            <div>
+                                <h4>{task.title}</h4>
+                                <p>{task.description}</p>
+                            </div>
+                            <button
+                                className="done-button"
+                                onClick={() => updateStatus(task, "Done")}
+                            >
+                                Done
+                            </button>
+                        </div>
+                    ))}
             </div>
-          ))}
-      </div>
-      <div className="column done">
-        <h3>Done</h3>
-        {tasks
-          .filter((task) => task.status === "Done")
-          .map((task) => (
-            <div
-              className="task"
-              key={task.id}
-              onClick={() => handleTaskClick(task, false)}
-            >
-              <h4>{task.title}</h4>
-              <p>{task.description}</p>
+            <div className="column done">
+                <h3>Done</h3>
+                {tasks
+                    .filter((task) => task.status === "Done")
+                    .map((task) => (
+                        <div
+                            className="task"
+                            key={task.id}
+                            onClick={() => handleTaskClick(task, false)}
+                            style={{
+                                borderColor: task.priority === "High" ? "red" : (task.priority === "Medium" ? "yellow" : "inherit"),
+                            }}
+                        >
+                            <h4>{task.title}</h4>
+                            <p>{task.description}</p>
+                        </div>
+                    ))}
             </div>
-          ))}
-      </div>
-      <TaskModal task={selectedTask} isOpen={isModalOpen} onClose={closeModal} displayEdit={isDisplayed}/>
-    </div>
-  );
+            <div className="column due">
+                <h3>Due</h3>
+                {tasks
+                    .filter((task) => new Date(task.due_date) < new Date() && task.status != "Done")
+                    .map((task) => (
+                        <div
+                            className="task"
+                            key={task.id}
+                            onClick={() => handleTaskClick(task, false)}
+                            style={{
+                                borderColor: task.priority === "High" ? "red" : (task.priority === "Medium" ? "yellow" : "inherit"),
+                            }}
+                        >
+                            <div>
+                                <h4>{task.title}</h4>
+                                <p>{task.description}</p>
+                            </div>
+                            <button style={{backgroundColor: "red"}}
+                                className="done-button"
+                                onClick={() => updateStatus(task, "Done")}
+                            >
+                                Mark as done
+                            </button>
+                        </div>
+                    ))}
+            </div>
+            <TaskModal task={selectedTask} isOpen={isModalOpen} onClose={closeModal} displayEdit={isDisplayed}/>
+        </div>
+    );
 };
 
-export default Home;    
+export default Home;
