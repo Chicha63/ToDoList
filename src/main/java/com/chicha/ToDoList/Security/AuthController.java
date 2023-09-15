@@ -43,6 +43,8 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+        System.out.println("Logged in");
+
         return ResponseEntity.ok(new JwtResponse(jwt, "Bearer",
                 userDetails.getUsername()));
     }

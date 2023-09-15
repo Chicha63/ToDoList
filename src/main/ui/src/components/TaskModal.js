@@ -8,7 +8,7 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
   const [editedTask, setEditedTask] = useState({ ...task });
   const updateTask = async (task) => {
     try {
-        const response = await api.put("/api/tasks/update",{
+        const response = await api.put("/api/tasks/update",{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}},{
             id: task.id,
             title: editedTask.title,
             description: editedTask.description,
@@ -19,7 +19,7 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
             created_at: task.created_at,
             updated_at: task.updated_at,
             user: task.user
-        });
+        },{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}});
       } catch (error) {
         console.error("Error updating task:", error);
       }

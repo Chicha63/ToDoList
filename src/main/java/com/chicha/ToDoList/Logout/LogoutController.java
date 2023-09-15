@@ -3,6 +3,7 @@ import com.chicha.ToDoList.Jwt.AuthTokenFilter;
 import com.chicha.ToDoList.Jwt.JwtUtil;
 import com.chicha.ToDoList.UserStuff.UserService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -37,6 +38,7 @@ public class LogoutController {
         }
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
             SecurityContextHolder.getContext().setAuthentication(null);
+            System.out.println("Logged out");
             return ResponseEntity.ok("Logged out successfully");
         }
         return ResponseEntity.ok("Failed to log out");

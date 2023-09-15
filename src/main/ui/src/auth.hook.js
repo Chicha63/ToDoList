@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 
 export const useAuth = () =>{
-    const [token, setToken] = useState("");
+    const [token, setToken] = useState(sessionStorage.getItem("token"));
 
     const login = useCallback((jwtToken)=>{
         setToken(jwtToken);
@@ -12,14 +12,6 @@ export const useAuth = () =>{
         setToken(null);
         sessionStorage.removeItem("token");
     },[])
-
-    useEffect(()=>{
-        const data = sessionStorage.getItem("token")
-        console.log(data)
-        if(data){
-            login(data);
-        }
-    },[login])
 
     return {token, login, logout}
 }

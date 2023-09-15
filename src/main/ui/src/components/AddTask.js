@@ -25,7 +25,7 @@ const AddTask = () =>{
                 priority:priority,
                 category:category,
                 status:"Pending"
-            }).then(console.log("success"),
+            },{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}}).then(console.log("success"),
             navigate("/home"));
         }catch(err){
             console.log(err);

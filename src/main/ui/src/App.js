@@ -4,13 +4,15 @@ import { useAuth } from './auth.hook';
 import Navbar from './components/Navbar';
 import { useRoutes } from './routes';
 import { animate } from './clickanim';
+import { useEffect, useCallback, useState } from 'react';
 
 
 function App() {
   const {token, login, logout} = useAuth();
-  const isAuthenticated = !!sessionStorage.getItem("token");
-  const routes = useRoutes(isAuthenticated)
+  
+  const isAuthenticated = !!token;
   console.log(isAuthenticated);
+  const routes = useRoutes(isAuthenticated)
   return (
     <Authcontext.Provider value={{
       token, login, logout, isAuthenticated

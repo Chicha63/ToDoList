@@ -11,12 +11,12 @@ const Navbar = () =>{
 
     const logout = async() =>{
         try{
-            const request = api.post("/api/logout")
+            const request = api.post("/api/logout",{},{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}})
             .then(
                 function(response) {
                     console.log(response)
                     auth.logout();
-                    navigate("/home")
+                    navigate("/login")
                 })
         }catch(err){
             console.log(err);

@@ -11,12 +11,11 @@ const Home = () =>{
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDisplayed, setDisplayed] = useState(false);
     const fetchTasks = async () => {
-        api.get('/api/tasks/get').then((res) => {
+        api.get('/api/tasks/get',{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}}).then((res) => {
             setTasks(res.data);
             console.log(tasks);
         }, fail => {
             console.log(fail);
-            setTimeout(window.location.reload(true), 1000);
         })
     };
   
@@ -33,7 +32,7 @@ const Home = () =>{
                 created_at: task.created_at,
                 updated_at: task.updated_at,
                 user: task.user
-            });
+            },{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}});
             fetchTasks();
         } catch (error) {
             console.error("Error fetching tasks:", error);

@@ -23,6 +23,7 @@ const Login = () =>{
                 function(response) {
                     console.log(response.data.token);
                     auth.login(response.data.token);
+                    console.log(sessionStorage.getItem("token"));
                     navigate("/home")
                 })
         }catch(err){
