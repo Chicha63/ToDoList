@@ -6,18 +6,10 @@ import { Authcontext } from "../AuthContext";
 import TaskModal from "./TaskModal";
 
 const Home = () =>{
-    const [tasks, setTasks] = useState([]);
+    const auth = useContext(Authcontext);
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDisplayed, setDisplayed] = useState(false);
-    const fetchTasks = async () => {
-        api.get('/api/tasks/get',{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}}).then((res) => {
-            setTasks(res.data);
-            console.log(tasks);
-        }, fail => {
-            console.log(fail);
-        })
-    };
   
     const updateStatus = async (task, stat) => {
         try {
@@ -33,7 +25,7 @@ const Home = () =>{
                 updated_at: task.updated_at,
                 user: task.user
             },{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}});
-            fetchTasks();
+            auth.fetchTasks();
         } catch (error) {
             console.error("Error fetching tasks:", error);
         }
@@ -49,29 +41,28 @@ const Home = () =>{
     const closeModal = () => {
         setSelectedTask(null);
         setIsModalOpen(false);
-        fetchTasks();
+        auth.fetchTasks();
     };
   
     useEffect(() => {
-        fetchTasks();
+        auth.fetchTasks();
     }, []);
   
     return (
         <div className="task-board">
             <div className="column pending">
                 <h3>Pending</h3>
-                {tasks
+                {auth.tasks
                     .filter((task) => task.status === "Pending" && new Date(task.due_date) > new Date())
                     .map((task) => (
                         <div
                             className="task"
                             key={task.id}
-                            onClick={() => handleTaskClick(task, true)}
                             style={{
                                 borderColor: task.priority === "High" ? "red" : (task.priority === "Medium" ? "yellow" : "inherit"),
                             }}
                         >
-                            <div>
+                            <div onClick={() => handleTaskClick(task, true)}>
                                 <h4>{task.title}</h4>
                                 <p>{task.description}</p>
                             </div>
@@ -86,18 +77,17 @@ const Home = () =>{
             </div>
             <div className="column in-progress">
                 <h3>In Progress</h3>
-                {tasks
+                {auth.tasks
                     .filter((task) => task.status === "In Progress" && (new Date(task.due_date) > new Date()))
                     .map((task) => (
                         <div
                             className="task"
                             key={task.id}
-                            onClick={() => handleTaskClick(task, true)}
                             style={{
                                 borderColor: task.priority === "High" ? "red" : (task.priority === "Medium" ? "yellow" : "inherit"),
                             }}
                         >
-                            <div>
+                            <div onClick={() => handleTaskClick(task, true)}>
                                 <h4>{task.title}</h4>
                                 <p>{task.description}</p>
                             </div>
@@ -112,7 +102,7 @@ const Home = () =>{
             </div>
             <div className="column done">
                 <h3>Done</h3>
-                {tasks
+                {auth.tasks
                     .filter((task) => task.status === "Done")
                     .map((task) => (
                         <div
@@ -130,7 +120,7 @@ const Home = () =>{
             </div>
             <div className="column due">
                 <h3>Due</h3>
-                {tasks
+                {auth.tasks
                     .filter((task) => new Date(task.due_date) < new Date() && task.status != "Done")
                     .map((task) => (
                         <div

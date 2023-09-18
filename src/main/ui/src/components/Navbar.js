@@ -1,32 +1,59 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Authcontext } from "../AuthContext";
 import './Navbar.css'
 import { Link, useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig';
 
-const Navbar = () =>{
-
+const Navbar = () => {
+    const [isFocused, setIsFocused] = useState(false);
     const navigate = useNavigate();
     const auth = useContext(Authcontext);
-
-    const logout = async() =>{
-        try{
-            const request = api.post("/api/logout",{},{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}})
-            .then(
-                function(response) {
-                    console.log(response)
+    const logout = async () => {
+        const request = api.post("/api/logout", {}, { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } })
+            .then(function (response) {
+                console.log(response)
+                auth.logout();
+                navigate("/login")
+            }).catch(function(error){
+                if(error.response.status == "401"){
                     auth.logout();
-                    navigate("/login")
-                })
-        }catch(err){
-            console.log(err);
-        }
+                    navigate("/login");
+                }
+            })
     }
-    return(
+    const handleSearchInputChange = (e) => {
+        auth.updateSearch(e.target.value);
+        auth.fetchTasks();
+    }
+    const handleSearchInputFocus = () => {
+        setIsFocused(true);
+        auth.updateSearch("");
+        auth.fetchTasks();
+    }
+
+    const handleSearchInputBlur = () => {
+        setIsFocused(false);
+
+    }
+    
+
+    return (
         <nav className="navbar">
-            <Link to="/home" className="navbar-logo">Home</Link>
+            <Link to="/home" className="navbar-logo">Task Manager</Link>
             <ul className="navbar-list">
-                <li><Link to="/addtask">Add task</Link></li>
+                <li className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        value={auth.searchData}
+                        onChange={handleSearchInputChange}
+                        onBlur={handleSearchInputBlur}
+                        onFocus={handleSearchInputFocus}
+                    />
+                    <i className="search-button">&#128269;</i>
+
+                </li>
+                <li><Link to="/addtask">Add Task</Link></li>
                 <li><button className="logout-button" onClick={logout}>Logout</button></li>
             </ul>
         </nav>

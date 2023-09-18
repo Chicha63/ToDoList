@@ -58,3 +58,47 @@
   .element{
     margin-top: 20px;
   }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; /* Calm background color */
+    border-radius: 20px; /* Rounded corners */
+    padding: 5px 10px;
+}
+
+/* Input field styles */
+.search-bar input[type="text"] {
+    border: none;
+    outline: none;
+    width: 200px; /* Adjust width as needed */
+    padding: 8px;
+    font-size: 16px;
+    background-color: transparent; /* Transparent background */
+    color: #333; /* Text color */
+    transition: width 0.3s ease-in-out; /* Smooth width transition on focus */
+}
+
+.search-bar input[type="text"]:focus {
+    width: 250px;
+}
+
+.search-bar input[type="text"]::placeholder {
+    color: #999;
+}
+
+.search-button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.search-button i {
+    font-size: 20px;
+    color: #666;
+}
+
+.search-button:hover i {
+    color: #007bff; 
+}

@@ -8,7 +8,7 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
   const [editedTask, setEditedTask] = useState({ ...task });
   const updateTask = async (task) => {
     try {
-        const response = await api.put("/api/tasks/update",{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}},{
+        const response = await api.put("/api/tasks/update",{
             id: task.id,
             title: editedTask.title,
             description: editedTask.description,
