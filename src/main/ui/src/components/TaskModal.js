@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import "./TaskModal.css"
-import "./Inputs.css"
+import "./styles/TaskModal.css"
+import "./styles/Inputs.css"
 import api from '../api/axiosConfig';
 
 const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({ ...task });
+
   const updateTask = async (task) => {
     try {
         const response = await api.put("/api/tasks/update",{
@@ -19,7 +21,11 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
             created_at: task.created_at,
             updated_at: task.updated_at,
             user: task.user
-        },{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}});
+        },{
+            headers:{
+              Authorization:`Bearer ${sessionStorage.getItem("token")}`
+            }
+          });
       } catch (error) {
         console.error("Error updating task:", error);
       }

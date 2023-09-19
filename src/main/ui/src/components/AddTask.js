@@ -1,36 +1,43 @@
 import React from "react";
 import { useState } from "react";
 import api from '../api/axiosConfig';
-import "./Inputs.css"
+import "./styles/Inputs.css"
 import { useNavigate } from "react-router-dom";
 
 const AddTask = () =>{
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [due_date, setDue_date] = useState("");
-    const [category, setCategory] = useState("");
-    const [status, setStatus] = useState("");
-    const [priority, setPriority] = useState("");
-    const currentDate = new Date().toISOString().split(".")[0];
-    const navigate = useNavigate();
-  const handlePriorityChange = (event) => {
-    setPriority(event.target.value);
-  };
-    const addTask = async() =>{
-        try{
-            const request = api.post("/api/tasks/add", {
-                title:title,
-                description:description,
-                due_date:due_date,
-                priority:priority,
-                category:category,
-                status:"Pending"
-            },{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}}).then(console.log("success"),
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [due_date, setDue_date] = useState("");
+  const [category, setCategory] = useState("");
+  const [priority, setPriority] = useState("");
+
+  const currentDate = new Date().toISOString().split(".")[0];
+
+  const navigate = useNavigate();
+  
+  const addTask = async() =>{
+      try{
+          const request = api.post("/api/tasks/add", {
+            title:title,
+            description:description,
+            due_date:due_date,
+            priority:priority,
+            category:category,
+            status:"Pending"
+          },{
+            headers:{
+              Authorization:`Bearer ${sessionStorage.getItem("token")}`}
+            })
+            .then(console.log("success"),
             navigate("/home"));
         }catch(err){
             console.log(err);
         }
     }
+
+    const handlePriorityChange = (event) => {
+        setPriority(event.target.value);
+    };
 
     return(
       <div>
@@ -72,15 +79,6 @@ const AddTask = () =>{
               value={category}
               onChange={(event) => {
               setCategory(event.target.value);
-              }}
-            />
-        </div>
-        <div className="custom-input">
-            <div><label className="custom-label">Status</label></div>
-            <input className="custom-field" type="text" placeholder="Enter Status"
-              value={status}
-              onChange={(event) => {
-              setStatus(event.target.value);
               }}
             />
         </div>
@@ -135,10 +133,10 @@ const AddTask = () =>{
        
       </div>
       </div>
-      <div style={{display:"flex", justifyContent:"center"}}>
-        <div><button type="submit" style={{marginRight:"20px"}} className="button" onClick={addTask}>Add task</button>  </div>
-        <div><button type="submit" className="button" onClick={()=>navigate("/home")} style={{backgroundColor:"#007bff"}}>Cancel</button></div>
-      </div>
+        <div style={{display:"flex", justifyContent:"center"}}>
+          <div><button type="submit" style={{marginRight:"20px"}} className="button" onClick={addTask}>Add task</button>  </div>
+          <div><button type="submit" className="button" onClick={()=>navigate("/home")} style={{backgroundColor:"#007bff"}}>Cancel</button></div>
+        </div>
       </div>
     )
 }

@@ -1,19 +1,21 @@
 import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import api from '../api/axiosConfig';
-import './Home.css'
+import './styles/Home.css'
 import { Authcontext } from "../AuthContext";
 import TaskModal from "./TaskModal";
 
 const Home = () =>{
     const auth = useContext(Authcontext);
+    
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDisplayed, setDisplayed] = useState(false);
   
     const updateStatus = async (task, stat) => {
         try {
-            const response = await api.put("/api/tasks/update",{
+            const response = await api.put("/api/tasks/update",
+            {
                 id: task.id,
                 title: task.title,
                 description: task.description,
@@ -24,7 +26,13 @@ const Home = () =>{
                 created_at: task.created_at,
                 updated_at: task.updated_at,
                 user: task.user
-            },{headers:{Authorization:`Bearer ${sessionStorage.getItem("token")}`}});
+            },
+            {
+                headers:{
+                    Authorization:`Bearer ${sessionStorage.getItem("token")}`
+                }
+            });
+
             auth.fetchTasks();
         } catch (error) {
             console.error("Error fetching tasks:", error);

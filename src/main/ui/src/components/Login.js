@@ -3,15 +3,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig';
 import { Authcontext } from "../AuthContext";
-import "./Login.css"
-import './Inputs.css'
+import "./styles/Login.css"
+import "./styles/Inputs.css"
 import { animate } from "../clickanim";
 
 const Login = () =>{
     const auth = useContext(Authcontext);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     const navigate = useNavigate();
+    
     const {isClicked, handleClick} = animate();
 
     const login = async() =>{

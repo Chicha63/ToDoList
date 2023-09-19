@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 
 export const useAuth = () =>{
     const [token, setToken] = useState(sessionStorage.getItem("token"));
@@ -13,5 +13,5 @@ export const useAuth = () =>{
         sessionStorage.removeItem("token");
     },[])
 
-    return {token, login, logout}
+    return {token, login, logout};
 }

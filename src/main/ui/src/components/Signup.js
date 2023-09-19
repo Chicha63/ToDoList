@@ -2,16 +2,20 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig';
-import "./Inputs.css"
+import "./styles/Inputs.css"
 import { Authcontext } from "../AuthContext";
 import { animate } from "../clickanim";
 
 const Signup = () =>{
-    const {isClicked, handleClick} = animate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     const navigate = useNavigate();
+
     const auth = useContext(Authcontext);
+    
+    const {isClicked, handleClick} = animate();
+
     const signup = async() =>{
         try{
             const request = api.post("/api/auth/signup", {
