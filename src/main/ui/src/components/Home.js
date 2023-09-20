@@ -11,6 +11,20 @@ const Home = () =>{
     const [selectedTask, setSelectedTask] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDisplayed, setDisplayed] = useState(false);
+
+    const deleteTask = async (taskId) => {
+        try {
+            const response = await api.post(`/api/tasks/delete/${taskId}`,{},
+            {
+                headers:{
+                    Authorization:`Bearer ${sessionStorage.getItem("token")}`
+                }
+            });
+            auth.fetchTasks();
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    }
   
     const updateStatus = async (task, stat) => {
         try {
@@ -74,12 +88,19 @@ const Home = () =>{
                                 <h4>{task.title}</h4>
                                 <p>{task.description}</p>
                             </div>
+                            
                             <button
                                 className="begin-button"
                                 onClick={() => updateStatus(task, "In Progress")}
                             >
                                 Begin
                             </button>
+                            <span 
+                                className="delete-button" 
+                                onClick={() => deleteTask(task.id)}
+                            >
+                                &#128465;
+                            </span>
                         </div>
                     ))}
             </div>
@@ -105,6 +126,12 @@ const Home = () =>{
                             >
                                 Done
                             </button>
+                            <span 
+                                className="delete-button" 
+                                onClick={() => deleteTask(task.id)}
+                            >
+                                &#128465;
+                            </span>
                         </div>
                     ))}
             </div>
@@ -123,6 +150,7 @@ const Home = () =>{
                         >
                             <h4>{task.title}</h4>
                             <p>{task.description}</p>
+                            
                         </div>
                     ))}
             </div>
@@ -149,6 +177,12 @@ const Home = () =>{
                             >
                                 Mark as done
                             </button>
+                            <span 
+                                className="delete-button" 
+                                onClick={() => deleteTask(task.id)}
+                            >
+                                &#128465;
+                            </span>
                         </div>
                     ))}
             </div>
