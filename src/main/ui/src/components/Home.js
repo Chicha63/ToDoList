@@ -162,12 +162,11 @@ const Home = () =>{
                         <div
                             className="task"
                             key={task.id}
-                            onClick={() => handleTaskClick(task, false)}
                             style={{
                                 borderColor: task.priority === "High" ? "red" : (task.priority === "Medium" ? "yellow" : "inherit"),
                             }}
                         >
-                            <div>
+                            <div onClick={() => handleTaskClick(task, false)}>
                                 <h4>{task.title}</h4>
                                 <p>{task.description}</p>
                             </div>

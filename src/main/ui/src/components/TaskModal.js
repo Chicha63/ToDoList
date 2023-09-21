@@ -95,6 +95,7 @@ const TaskModal = ({ task, isOpen, onClose, displayEdit }) => {
                   type="datetime-local"
                   className="custom-field"
                   value={editedTask.due_date}
+                  min={new Date().toISOString().split(".")[0]}
                   onChange={(e) =>
                     setEditedTask({
                       ...editedTask,
