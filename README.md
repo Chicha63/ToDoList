@@ -19,7 +19,7 @@ The ToDoList project is a task management web application developed with Java Sp
 ## Features
 
 - User Authentication: Users can create accounts, log in, and manage their tasks securely.
-- Task Management: Create, update, and delete tasks with ease.
+- Task Management: Create, update and delete tasks with ease.
 - Task Priority: Assign priorities to tasks to indicate their importance.
 - Task Categories: Organize tasks into categories for better organization
 - Due Dates: Set due dates for tasks to help prioritize and schedule activities.
