@@ -4,6 +4,7 @@ import Login from "./components/Login"
 import Signup from "./components/Signup"
 import AddTask from "./components/AddTask"
 import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
 
 export const useRoutes = isAuthenticated => {
     if(isAuthenticated){

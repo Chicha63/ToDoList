@@ -2,6 +2,7 @@ import './App.css';
 import { Authcontext } from './AuthContext.js';
 import api from './api/axiosConfig';
 import { useAuth } from './auth.hook';
+import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import { useRoutes } from './routes';
 import { useState } from 'react';
@@ -52,6 +53,7 @@ function App() {
       {isAuthenticated && <Navbar/>}
       <div className="App">
         {routes}
+        <Footer/>
       </div>
     </Authcontext.Provider>
   );
