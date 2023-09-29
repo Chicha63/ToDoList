@@ -28,7 +28,7 @@ public class AuthService {
     @Autowired
     JwtUtil jwtUtils;
 
-    public JwtResponse signIn(LoginRequest loginRequest){
+    public JwtResponse signIn(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -43,7 +43,7 @@ public class AuthService {
                 userDetails.getUsername());
     }
 
-    public ResponseEntity<MessageResponse> signUp(SignupRequest signUpRequest){
+    public ResponseEntity<MessageResponse> signUp(SignupRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
@@ -54,4 +54,5 @@ public class AuthService {
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
 }
